@@ -1,13 +1,9 @@
 const User = require('../models/User');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const createUser = async (req, res) => {    
     try {
         const { name, email, password, phone, departement } = req.body;
-
-        if (!name || !email || !password) {
-            return res.status(400).json({ message: 'Semua field harus diisi' });
-        }
 
         const existingUser = await User.findOne({ email });
 
@@ -19,6 +15,7 @@ const createUser = async (req, res) => {
         }
         
         const hashedPassword = await bcrypt.hash(password, 12);
+       
         const newUser = new User({ 
             name, 
             email, 
@@ -31,9 +28,12 @@ const createUser = async (req, res) => {
             message: 'User berhasil dibuat',
         });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            success: false,
+            message: error.message });
     }
 }
+
 const getAllUsers = async (req, res) => {    
     try {
         const users = await User.find();
@@ -42,17 +42,17 @@ const getAllUsers = async (req, res) => {
             data: users,
         });
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });   
+      res.status(500).json({ success: false, message: error.message });   
     }
 }
 
-
 const getUserById = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { id } = req.params
+        
         const user = await User.findById(id);
         if (!user) {
-            return res.status(404).json({ message: 'User tidak ditemukan' });
+            return res.status(404).json({success: false, message: 'Akun tidak ditemukan' });
         }
         res.status(200).json({
             success: true,
@@ -60,17 +60,21 @@ const getUserById = async (req, res) => {
         });
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({success: false, message: error.message });
     }
 }
+
 const updateUser = async (req, res) => {
     try {
         const { id } = req.params;
         const { name, email, phone, departement } = req.body;
 
+        if (!name && !email && !phone && !departement) {
+            return res.status(400).json({success: false, message: 'Tidak ada data yang diperbarui' });
+        }
         const user = await User.findById(id);                       
         if (!user) {
-            return res.status(404).json({ message: 'User tidak ditemukan' });
+            return res.status(404).json({success: false, message: 'Akun tidak ditemukan' });
         }
         if (name) user.name = name;
         if (email) user.email = email;
@@ -83,15 +87,19 @@ const updateUser = async (req, res) => {
         });
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ 
+            success: false,
+            message: error.message 
+        });
     }
 }
+
 const deleteUser = async (req, res) => {
     try {
         const { id } = req.params;
         const user = await User.findById(id);
         if (!user) {
-            return res.status(404).json({ message: 'User tidak ditemukan' });
+            return res.status(404).json({success: false, message: 'User tidak ditemukan' });
         }
         await User.findByIdAndDelete(id);
         res.status(200).json({
@@ -100,7 +108,7 @@ const deleteUser = async (req, res) => {
         });
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({success: true, message: error.message });
     }
 }
 

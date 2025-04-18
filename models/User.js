@@ -9,11 +9,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
+        lowercase: true,
     },
     phone: {
         type: String,
-        required: false,
-        unique: true,
+        required: true,
     },
     isActive: {
         type: Boolean,
@@ -21,12 +21,16 @@ const userSchema = new mongoose.Schema({
     },
     departement: {
         type: String,
-        required: true,
+        required: true, 
     },
     password: {
         type: String,
         required: true,
     },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
 })
 
 const User = mongoose.model('User', userSchema);
