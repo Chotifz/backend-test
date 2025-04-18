@@ -52,8 +52,7 @@ Sebelum menjalankan aplikasi ini, pastikan Anda telah menginstal:
 1. Clone repositori ini:
 
 ```bash
-git clone https://github.com/yourusername/user-management-api.git
-cd user-management-api
+git clone https://github.com/Chotifz/user-management-api
 ```
 
 2. Instal dependensi:

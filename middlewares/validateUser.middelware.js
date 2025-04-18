@@ -13,15 +13,7 @@ const validateCreateUser = [
     .notEmpty().withMessage('Password harus diisi')
     .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)
     .withMessage('Password harus minimal 8 karakter dan mengandung setidaknya 1 huruf dan 1 angka'),
-
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      const message = errors.array().map(err => err.msg);
-      return res.status(400).json({ success: false, message });
-    }
-    next();
-  }
+  validateErrors
 ];
 
 const validateUpdateUser = [
@@ -40,7 +32,7 @@ const validateUpdateUser = [
   validateErrors
 ];
 
-// Middleware handler untuk menampilkan pesan error
+
 function validateErrors(req, res, next) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
