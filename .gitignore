@@ -1,5 +1,24 @@
+# Node modules
 node_modules
+
+# Environment
 .env
-dist/
+.env.*.local
+
+# Build output
+dist
+build
+out
+
+# Logs
+npm-debug.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+
+# Deploy config
 .vercel
 
+# IDE files
+.vscode

@@ -26,6 +26,7 @@ const createUser = async (req, res) => {
         res.status(201).json({
             success: true,
             message: 'User berhasil dibuat',
+            data: newUser,
         });
     } catch (error) {
         res.status(500).json({
@@ -84,6 +85,7 @@ const updateUser = async (req, res) => {
         res.status(200).json({
             success: true,
             message: 'User berhasil diperbarui',
+            data: user,
         });
     }
     catch (error) {
